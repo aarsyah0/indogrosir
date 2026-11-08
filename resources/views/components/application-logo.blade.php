@@ -1,0 +1,1 @@
+<x-indogrosir-logo {{ $attributes }} />
