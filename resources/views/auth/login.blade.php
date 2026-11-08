@@ -1,13 +1,13 @@
 <x-guest-layout>
-    <div class="mb-6">
-        <p class="text-xs font-semibold uppercase tracking-[.14em] text-brand">Indogrosir · ATK &amp; ABT</p>
-        <h1 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">Masuk ke sistem</h1>
-        <p class="mt-1 text-sm text-slate-500">Gunakan akun kerja Anda untuk melanjutkan.</p>
+    <div class="auth-form-heading">
+        <span class="auth-form-kicker">Akses pengguna</span>
+        <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Masuk ke sistem</h1>
+        <p class="mt-2 text-sm leading-6 text-slate-500">Gunakan akun kerja Anda untuk melanjutkan.</p>
     </div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" class="auth-login-form">
         @csrf
 
         <!-- Email Address -->
@@ -19,7 +19,7 @@
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
+        <div>
             <x-input-label for="password" value="Kata sandi" />
 
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
@@ -29,23 +29,23 @@
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
+        <div class="auth-login-options">
+            <label for="remember_me" class="inline-flex min-h-11 cursor-pointer items-center">
                 <input id="remember_me" type="checkbox"
                     class="rounded border-slate-300 text-brand focus:ring-brand-500" name="remember">
                 <span class="ms-2 text-sm text-slate-600">Ingat saya</span>
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="auth-login-submit">
             @if (Route::has('password.request'))
-                <a class="rounded-md text-sm font-medium text-brand hover:text-brand-700 hover:underline"
+                <a class="rounded-md text-sm font-semibold text-brand transition-colors hover:text-brand-700 hover:underline"
                     href="{{ route('password.request') }}">
                     Lupa kata sandi?
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
+            <x-primary-button class="auth-login-button">
                 Masuk
             </x-primary-button>
         </div>

@@ -12,101 +12,86 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-slate-50 text-slate-800 antialiased">
-    <div class="min-h-screen">
-        <header class="border-b border-slate-200 bg-white">
-            <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-                <div class="flex items-center gap-3">
-                    <x-indogrosir-logo class="h-10 max-w-44 object-left" />
-                    <div>
-                        <p class="text-xs text-slate-500">Pengelolaan ATK &amp; ABT</p>
-                    </div>
-                </div>
-                <nav aria-label="Akun" class="flex items-center gap-2">
+<body class="welcome-page antialiased">
+    <header class="welcome-header">
+        <div class="welcome-header-inner">
+            <a href="/" class="welcome-brand" aria-label="Indogrosir — halaman awal">
+                <x-indogrosir-logo class="h-10 max-w-44 object-left" />
+                <span class="welcome-brand-caption">Pengelolaan ATK &amp; ABT</span>
+            </a>
+            <nav aria-label="Akun" class="welcome-nav">
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="btn-primary">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn-secondary">Masuk</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn-primary">Daftar</a>
+                    @endif
+                @endauth
+            </nav>
+        </div>
+    </header>
+
+    <main class="welcome-main">
+        <section class="welcome-hero">
+            <div class="welcome-copy">
+                <span class="welcome-eyebrow"><span></span>Operasional internal · PT Inti Cakrawala Citra</span>
+                <h1>Kebutuhan operasional tercatat, <span>pengadaan lebih terkendali.</span></h1>
+                <p class="welcome-lead">Satu alur kerja untuk pengajuan, persetujuan, pembelian, penerimaan, persediaan, dan pelaporan kebutuhan ATK &amp; ABT.</p>
+                <div class="welcome-actions">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="btn-primary">
-                            Dashboard
-                        </a>
+                        <a href="{{ url('/dashboard') }}" class="btn-primary">Lihat Dashboard <span aria-hidden="true">&rarr;</span></a>
                     @else
-                        <a href="{{ route('login') }}" class="btn-secondary">
-                            Masuk
-                        </a>
+                        <a href="{{ route('login') }}" class="btn-primary">Masuk ke Sistem <span aria-hidden="true">&rarr;</span></a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn-primary">
-                                Daftar
-                            </a>
+                            <a href="{{ route('register') }}" class="btn-secondary">Buat Akun</a>
                         @endif
                     @endauth
-                </nav>
-            </div>
-        </header>
-
-        <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-            <section class="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-                <div>
-                    <span class="inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-800">
-                        Operasional internal · PT Inti Cakrawala Citra
-                    </span>
-                    <h2 class="mt-5 max-w-2xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-                        Kebutuhan operasional tercatat, pengadaan lebih terkendali.
-                    </h2>
-                    <p class="mt-4 max-w-xl text-base leading-7 text-slate-600">
-                        Satu alur kerja untuk pengajuan, persetujuan, pembelian, penerimaan, persediaan, dan pelaporan
-                        kebutuhan ATK &amp; ABT.
-                    </p>
-                    <div class="mt-7 flex flex-wrap gap-3">
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="btn-primary">
-                                Lihat Dashboard
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="btn-primary">
-                                Masuk ke Sistem
-                            </a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="btn-secondary">
-                                    Buat Akun
-                                </a>
-                            @endif
-                        @endauth
-                    </div>
                 </div>
+                <p class="welcome-footnote"><span aria-hidden="true"></span>Lingkungan kerja internal Indogrosir</p>
+            </div>
 
-                <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                    <div class="mb-5 flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
-                        <div>
-                            <p class="text-xs font-semibold tracking-wide text-brand">SIKLUS OPERASIONAL</p>
-                            <h3 class="mt-1 text-base font-semibold text-slate-900">Alur pengelolaan</h3>
-                        </div>
-                        <span
-                            class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">Terintegrasi</span>
+            <section class="welcome-flow-card" aria-labelledby="welcome-flow-title">
+                <div class="welcome-flow-heading">
+                    <div>
+                        <p class="welcome-card-eyebrow">SIKLUS OPERASIONAL</p>
+                        <h2 id="welcome-flow-title">Alur pengelolaan</h2>
                     </div>
-                    <ol class="divide-y divide-slate-100">
-                        <li class="flex items-center gap-4 py-3 first:pt-0">
-                            <span
-                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-semibold text-red-800">01</span>
-                            <span class="text-sm font-medium text-slate-700">Pengajuan dan persetujuan berjenjang</span>
-                        </li>
-                        <li class="flex items-center gap-4 py-3">
-                            <span
-                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-semibold text-red-800">02</span>
-                            <span class="text-sm font-medium text-slate-700">Verifikasi GA dan pencatatan
-                                pembelian</span>
-                        </li>
-                        <li class="flex items-center gap-4 py-3">
-                            <span
-                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-semibold text-red-800">03</span>
-                            <span class="text-sm font-medium text-slate-700">Penerimaan barang dan pembaruan stok</span>
-                        </li>
-                        <li class="flex items-center gap-4 py-3 last:pb-0">
-                            <span
-                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-semibold text-red-800">04</span>
-                            <span class="text-sm font-medium text-slate-700">Monitoring, laporan, dan audit trail</span>
-                    </ol>
+                    <span class="welcome-integrated"><span></span>Terintegrasi</span>
+                </div>
+                <ol class="welcome-flow-list">
+                    <li>
+                        <x-context-icon name="clipboard" tone="red" class="welcome-flow-icon" />
+                        <span class="welcome-step-number">01</span>
+                        <span class="welcome-flow-label">Pengajuan dan persetujuan berjenjang</span>
+                        <span class="welcome-flow-arrow" aria-hidden="true">&rarr;</span>
+                    </li>
+                    <li>
+                        <x-context-icon name="check" tone="blue" class="welcome-flow-icon" />
+                        <span class="welcome-step-number">02</span>
+                        <span class="welcome-flow-label">Verifikasi GA dan pencatatan pembelian</span>
+                        <span class="welcome-flow-arrow" aria-hidden="true">&rarr;</span>
+                    </li>
+                    <li>
+                        <x-context-icon name="package-check" tone="green" class="welcome-flow-icon" />
+                        <span class="welcome-step-number">03</span>
+                        <span class="welcome-flow-label">Penerimaan barang dan pembaruan stok</span>
+                        <span class="welcome-flow-arrow" aria-hidden="true">&rarr;</span>
+                    </li>
+                    <li>
+                        <x-context-icon name="chart" tone="gold" class="welcome-flow-icon" />
+                        <span class="welcome-step-number">04</span>
+                        <span class="welcome-flow-label">Monitoring, laporan, dan audit trail</span>
+                        <span class="welcome-flow-arrow" aria-hidden="true">&rarr;</span>
+                    </li>
+                </ol>
+                <div class="welcome-flow-footer">
+                    <span class="welcome-flow-footer-mark" aria-hidden="true"></span>
+                    <span>Dari kebutuhan hingga persediaan</span>
                 </div>
             </section>
-        </main>
-    </div>
+        </section>
+    </main>
 </body>
 
 </html>

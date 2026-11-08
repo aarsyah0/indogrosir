@@ -5,47 +5,66 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Indogrosir | ATK/ABT') }}</title>
     <link rel="icon" type="image/png" href="https://www.indogrosir.co.id/images/logo/logo_2feb2026.png">
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700&display=swap" rel="stylesheet" />
-
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
-    <main class="grid min-h-screen bg-canvas lg:grid-cols-[minmax(0,1fr)_minmax(28rem,42rem)]">
-        <aside aria-hidden="true" class="relative hidden min-h-screen overflow-hidden bg-navy-700 px-10 py-12 text-white lg:flex lg:flex-col lg:justify-between xl:px-16">
-            <div class="absolute -right-28 -top-24 h-96 w-96 rounded-full bg-brand-500/90"></div>
-            <div class="absolute -bottom-44 -left-32 h-[30rem] w-[30rem] rounded-full border-[3rem] border-accent-500/90"></div>
-            <div class="relative z-10 inline-flex w-fit items-center rounded-xl bg-white px-4 py-3 shadow-lg">
-                <x-indogrosir-logo class="h-10 max-w-48 object-left" />
+<body class="auth-page font-sans antialiased">
+    <div class="auth-backdrop-glow auth-backdrop-glow-one" aria-hidden="true"></div>
+    <div class="auth-backdrop-glow auth-backdrop-glow-two" aria-hidden="true"></div>
+    <main class="auth-shell">
+      <div class="auth-frame">
+        <aside aria-hidden="true" class="auth-aside">
+            <div class="auth-orbit auth-orbit-one"></div>
+            <div class="auth-orbit auth-orbit-two"></div>
+            <div class="auth-aside-inner">
+                <div class="auth-logo-panel">
+                    <x-indogrosir-logo class="h-10 max-w-44 object-left" />
+                    <span class="auth-logo-divider"></span>
+                    <span class="auth-logo-caption"><strong>ATK &amp; ABT</strong><small>Portal operasional</small></span>
+                </div>
+                <div class="auth-aside-copy">
+                    <span class="auth-brand-label">Pengelolaan ATK &amp; ABT</span>
+                    <h2>Alur operasional yang lebih tertata.</h2>
+                    <p>Sistem internal untuk mengelola kebutuhan, persetujuan, pengadaan, dan persediaan.</p>
+                    <div class="auth-flow-list">
+                        <div class="auth-flow-item">
+                            <span class="auth-flow-icon"><x-context-icon name="clipboard" tone="red" /></span>
+                            <span><strong>Pengajuan</strong><small>Kebutuhan tercatat</small></span>
+                            <span class="auth-flow-number">01</span>
+                        </div>
+                        <div class="auth-flow-item">
+                            <span class="auth-flow-icon"><x-context-icon name="check" tone="gold" /></span>
+                            <span><strong>Persetujuan</strong><small>Proses terarah</small></span>
+                            <span class="auth-flow-number">02</span>
+                        </div>
+                        <div class="auth-flow-item">
+                            <span class="auth-flow-icon"><x-context-icon name="package-check" tone="green" /></span>
+                            <span><strong>Pengadaan &amp; stok</strong><small>Pencatatan terpadu</small></span>
+                            <span class="auth-flow-number">03</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="auth-aside-footer">PT Inti Cakrawala Citra <span aria-hidden="true">&middot;</span> Sistem internal</p>
             </div>
-            <div class="relative z-10 max-w-lg">
-                <p class="text-sm font-semibold uppercase tracking-[.16em] text-white/75">Pengelolaan ATK &amp; ABT</p>
-                <div class="mt-6 h-1 w-16 rounded-full bg-accent-500"></div>
-            </div>
-            <p class="relative z-10 text-sm text-white/70">Sistem internal pengelolaan kebutuhan operasional</p>
         </aside>
 
-        <section class="flex min-h-screen items-center justify-center px-4 py-8 sm:px-8 lg:px-10 xl:px-16">
-            <div class="w-full max-w-md page-enter">
-                <a href="/" class="mb-6 flex items-center justify-center gap-3 lg:hidden">
-                    <x-indogrosir-logo class="h-9 max-w-40 object-left" />
-                    <span class="text-left">
-                        <span class="block text-xs text-slate-500">Pengelolaan ATK &amp; ABT</span>
-                    </span>
+        <section class="auth-content">
+            <div class="auth-content-inner">
+                <a href="/" class="auth-mobile-brand" aria-label="Kembali ke halaman awal">
+                    <span class="auth-mobile-logo"><x-indogrosir-logo class="h-9 max-w-40 object-left" /></span>
+                    <span class="auth-mobile-caption">Pengelolaan ATK &amp; ABT</span>
                 </a>
-                <section class="rounded-2xl border border-border bg-white p-6 shadow-lg shadow-slate-900/5 sm:p-9">
+                <section class="auth-card page-enter">
                     {{ $slot }}
                 </section>
-                <p class="mt-5 text-center text-xs text-slate-400 lg:hidden">Sistem internal pengelolaan kebutuhan operasional</p>
+                <p class="auth-content-footer">Akses hanya untuk pengguna yang memiliki akun kerja.</p>
             </div>
         </section>
+      </div>
     </main>
 </body>
 
