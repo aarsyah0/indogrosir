@@ -202,8 +202,8 @@
                         }
                     });
                 };
-                setup('usageChart', @json($charts['usage']), '#c8202f');
-                setup('spendChart', @json($charts['spend']), '#536477', true);
+                setup('usageChart', @json($charts['usage']), '#D71920');
+                setup('spendChart', @json($charts['spend']), '#0B4EA2', true);
             });
         </script>
     @endpush

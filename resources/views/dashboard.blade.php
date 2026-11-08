@@ -8,7 +8,7 @@
     </div>
 
     <!-- Stat cards -->
-    <div class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         @foreach ($data['cards'] as $index => $card)
             <div class="stat-card flex items-center gap-3">
                 <div class="flex min-w-0 flex-1 gap-3">
@@ -202,8 +202,8 @@
                             datasets: [{
                                 label: 'Estimasi kebutuhan',
                                 data: @json($data['monthlyNeeds']['data']),
-                                borderColor: 'var(--color-brand-500)',
-                                backgroundColor: 'rgba(200, 32, 47, .08)',
+                                borderColor: '#D71920',
+                                backgroundColor: 'rgba(215, 25, 32, .08)',
                                 fill: true,
                                 tension: .25
                             }]

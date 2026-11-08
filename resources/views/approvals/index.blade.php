@@ -15,7 +15,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="table-wrap">
+            <div class="table-wrap" role="region" aria-label="Tabel antrian persetujuan" tabindex="0">
                 <table class="min-w-full text-sm">
                     <thead class="bg-navy-50">
                         <tr>
@@ -34,7 +34,7 @@
                                 <td class="px-4 py-3 text-slate-600">{{ $req->requester?->name ?? '—' }}</td>
                                 <td class="px-4 py-3 font-mono text-sm font-semibold text-slate-800 tabular-nums">{{ format_money($req->estimated_total) }}</td>
                                 <td class="px-4 py-3 text-right">
-                                    <a href="{{ route($showRoute, $req) }}" class="inline-flex items-center gap-1.5 text-brand font-medium text-sm transition-colors hover:text-brand-600">
+                                    <a href="{{ route($showRoute, $req) }}" class="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-brand font-medium text-sm transition-colors duration-150 hover:bg-brand-50 hover:text-brand-700">
                                         Periksa
                                         <svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 21l5-5 5 5"/></svg>
                                     </a>

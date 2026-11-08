@@ -13,7 +13,7 @@
         @foreach ($tabs as $tab)
             @php($active = request()->routeIs($tab['route']))
             <a href="{{ route($tab['route']) }}" @class([
-                'border-b-2 px-3 py-2.5 text-sm font-medium transition-colors',
+                'inline-flex min-h-11 items-center border-b-2 px-3 text-sm font-medium transition-colors duration-150',
                 'border-brand text-brand' => $active,
                 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800' => !$active,
             ]) @if ($active) aria-current="page" @endif>

@@ -5,6 +5,12 @@ import Chart from 'chart.js/auto';
 window.Alpine = Alpine;
 window.Chart = Chart;
 
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+Chart.defaults.animation.duration = motionPreference.matches ? 0 : 250;
+motionPreference.addEventListener?.('change', event => {
+    Chart.defaults.animation.duration = event.matches ? 0 : 250;
+});
+
 Alpine.data('searchableSelect', ({ options = [], value = '', required = false } = {}) => ({
     options,
     selected: value === null || value === undefined ? '' : String(value),
