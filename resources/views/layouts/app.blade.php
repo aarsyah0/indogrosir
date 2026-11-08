@@ -53,17 +53,20 @@
             'settings' =>
                 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-5v2m0 14v2m9-9h-2M5 12H3m15.4-6.4-1.4 1.4M7 17l-1.4 1.4m12.8 0L17 17M7 7 5.6 5.6',
         ];
-        $navGroups = collect($navItems ?? [])->groupBy('group');
+        $navCollection = collect($navItems ?? []);
+        $standaloneItems = $navCollection->filter(fn ($item) => empty($item['group']));
+        $navGroups = $navCollection->filter(fn ($item) => !empty($item['group']))->groupBy('group');
     @endphp
 
-    <div class="min-h-screen lg:flex" :class="sidebarCollapsed ? 'sidebar-collapsed' : ''">
+    <div class="min-h-screen lg:flex" :class="sidebarCollapsed && !userMenu ? 'sidebar-collapsed' : ''">
         <!-- Mobile overlay -->
         <div x-show="sidebar" x-cloak x-transition.opacity.duration.200ms class="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-[2px] lg:hidden"
             @click="sidebar=false" aria-hidden="true"></div>
 
         <!-- Sidebar -->
-        <aside class="fixed inset-y-0 left-0 z-40 flex w-72 transform flex-col border-r border-slate-200 bg-white shadow-xl transition-[width,transform] duration-200 ease-out lg:sticky lg:top-0 lg:h-screen lg:min-h-screen lg:w-64 lg:flex-shrink-0 lg:shadow-none"
-            :class="[sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0', sidebarCollapsed ? 'lg:w-20' : 'lg:w-64']"
+        <aside class="fixed inset-y-0 left-0 z-40 flex w-72 transform flex-col border-r border-slate-200 bg-white shadow-xl transition-[width,transform] duration-200 ease-out lg:sticky lg:top-0 lg:h-screen lg:min-h-screen lg:flex-shrink-0 lg:shadow-none"
+            :class="[sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0', sidebarCollapsed && !userMenu ? 'lg:w-20' : 'lg:w-64']"
+            :style="!isMobile ? (sidebarCollapsed && !userMenu ? 'width: 5rem' : 'width: 16rem') : ''"
             :aria-label="sidebarCollapsed ? 'Navigasi utama diciutkan' : 'Navigasi utama'"
             :inert="!sidebar && isMobile">
             <div class="flex h-16 shrink-0 items-center gap-3 border-b border-slate-200 px-4 transition-[padding] duration-200"
@@ -85,6 +88,24 @@
 
             <nav id="primary-navigation" aria-label="Navigasi utama" class="flex-1 space-y-1 overflow-y-auto py-4 transition-[padding] duration-200"
                 :class="sidebarCollapsed ? 'px-1.5 lg:px-1.5' : 'px-3'" @scroll.passive="hideSidebarTooltip()">
+                @foreach ($standaloneItems as $item)
+                    @php
+                        $isActive = request()->routeIs($item['route'] . '*') || request()->routeIs(str_replace('.index', '', $item['route']) . '.*');
+                    @endphp
+                    <a href="{{ route($item['route']) }}" @click="sidebar=false; hideSidebarTooltip()" aria-label="{{ $item['label'] }}"
+                        data-tooltip="{{ $item['label'] }}" @mouseenter="showSidebarTooltip($event)" @mouseleave="hideSidebarTooltip()" @focus="showSidebarTooltip($event)" @blur="hideSidebarTooltip()"
+                        aria-current="{{ $isActive ? 'page' : 'false' }}"
+                        @class([
+                            'nav-link group relative mb-1 flex min-h-11 items-center gap-2.5 rounded-lg px-3 py-2.5',
+                            'bg-brand-50/80 font-semibold text-brand-800' => $isActive,
+                            'text-slate-600 hover:bg-slate-50 hover:text-slate-900' => !$isActive,
+                        ])
+                        :class="sidebarCollapsed ? 'lg:justify-center lg:px-0' : ''">
+                        <svg aria-hidden="true" class="nav-icon h-[18px] w-[18px] shrink-0 {{ $isActive ? 'text-brand-700' : 'text-slate-400 group-hover:text-slate-700' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="{{ $navIconPaths[$item['icon']] ?? $navIconPaths['document'] }}" /></svg>
+                        <span class="nav-link-label min-w-0 flex-1 truncate text-[13px] font-medium sm:text-sm">{{ $item['label'] }}</span>
+                        <span aria-hidden="true" class="nav-active-dot h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"></span>
+                    </a>
+                @endforeach
                 @foreach ($navGroups as $groupLabel => $items)
                     @php
                         $groupIsActive = collect($items)->contains(function (array $navItem): bool {
@@ -145,7 +166,7 @@
             <div class="border-t border-slate-200 px-3 py-3.5 transition-[padding] duration-200"
                 :class="sidebarCollapsed ? 'lg:px-1.5' : ''">
                 @if ($currentUser)
-                    <div class="relative" @click.away="userMenu = false; hideSidebarTooltip()">
+                    <div class="relative flex flex-col-reverse" @click.away="userMenu = false; hideSidebarTooltip()">
                         <button type="button" data-tooltip="{{ $currentUser->name }}" @click="userMenu = !userMenu; hideSidebarTooltip()"
                             @mouseenter="showSidebarTooltip($event)" @mouseleave="hideSidebarTooltip()" @focus="showSidebarTooltip($event)" @blur="hideSidebarTooltip()"
                             class="nav-profile-trigger flex min-h-11 w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors duration-150 hover:bg-slate-50 focus-visible:outline-none"
@@ -160,9 +181,8 @@
                             </span>
                             <svg :class="userMenu ? 'rotate-180' : ''" class="nav-profile-chevron h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
                         </button>
-                        <div x-show="userMenu" x-cloak x-transition.origin.bottom.left.duration.150ms
-                            class="sidebar-profile-menu absolute bottom-full left-0 z-50 mb-2 w-full min-w-[14rem] rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-900/10"
-                            :style="sidebarCollapsed && !isMobile ? 'left: 4rem; width: 14rem' : ''" role="menu" aria-label="Menu akun">
+                        <div x-show="userMenu" x-cloak x-transition.opacity.duration.150ms
+                            class="sidebar-profile-menu mb-2 w-full rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm" role="menu" aria-label="Menu akun">
                             <div class="border-b border-slate-100 px-3 py-2.5">
                                 <p class="truncate text-xs font-semibold text-slate-800">{{ $currentUser->name }}</p>
                                 <p class="truncate text-[10px] text-slate-500">{{ $currentUser->primaryRoleLabel() }}</p>

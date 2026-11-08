@@ -9,7 +9,7 @@ class Navigation
     public static function items(User $user): array
     {
         $all = [
-            ['label' => 'Dashboard', 'route' => 'dashboard', 'permission' => null, 'icon' => 'home', 'group' => 'Ringkasan'],
+            ['label' => 'Dashboard', 'route' => 'dashboard', 'permission' => null, 'icon' => 'home', 'group' => null],
             ['label' => 'Pengajuan Masuk', 'route' => 'inbox.index', 'permission' => 'requisitions.view_all', 'icon' => 'inbox', 'group' => 'Pengajuan & Persetujuan'],
             ['label' => 'Pengajuan Saya', 'route' => 'requisitions.index', 'permission' => 'requisitions.view_own_division', 'icon' => 'file', 'group' => 'Pengajuan & Persetujuan'],
             ['label' => 'Approval Manager', 'route' => 'approvals.manager.index', 'permission' => 'approvals.manager', 'icon' => 'check', 'group' => 'Pengajuan & Persetujuan'],
