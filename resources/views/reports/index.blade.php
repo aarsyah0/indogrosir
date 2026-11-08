@@ -1,7 +1,7 @@
 <x-app-layout title="Laporan Bulanan">
     <x-report-navigation />
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
+        <div class="w-full min-w-0 sm:flex-1">
             <x-page-header
                 header="Laporan Bulanan"
                 subheader="Ringkasan pengajuan dan realisasi pembelian."
@@ -80,23 +80,35 @@
     </div>
 
     <div class="mt-5 grid gap-4 md:grid-cols-4">
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Rekapan</p>
             <p class="stat-value">{{ $report['total_requisitions'] }}</p>
+            </div>
+            <x-context-icon name="clipboard" tone="blue" />
         </div>
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Estimasi</p>
             <p class="stat-value">{{ format_money($report['estimate']) }}</p>
+            </div>
+            <x-context-icon name="currency" tone="gold" />
         </div>
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Pembelian</p>
             <p class="stat-value">{{ format_money($report['actual']) }}</p>
+            </div>
+            <x-context-icon name="cart" tone="blue" />
         </div>
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Variance</p>
             <p class="stat-value {{ $report['variance'] >= 0 ? 'text-emerald-700' : 'text-rose-700' }}">
                 {{ format_money($report['variance']) }}
             </p>
+            </div>
+            <x-context-icon name="chart" :tone="$report['variance'] >= 0 ? 'green' : 'red'" />
         </div>
     </div>
 

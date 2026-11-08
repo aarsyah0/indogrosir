@@ -1,7 +1,7 @@
 <x-app-layout title="Kebutuhan Barang">
     <x-report-navigation />
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
+        <div class="w-full min-w-0 sm:flex-1">
             <x-page-header
                 header="Kebutuhan Barang"
                 subheader="Lihat volume kebutuhan berdasarkan periode dan divisi."
@@ -25,17 +25,26 @@
     </div>
 
     <div class="mt-4 grid gap-3 sm:grid-cols-3">
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Pengajuan</p>
             <p class="stat-value">{{ $report['total_requisitions'] }}</p>
+            </div>
+            <x-context-icon name="clipboard" tone="blue" />
         </div>
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Qty diminta</p>
             <p class="stat-value">{{ number_format((float) $report['qty_requested'], 2) }}</p>
+            </div>
+            <x-context-icon name="scale" tone="gold" />
         </div>
-        <div class="stat-card">
+        <div class="stat-card flex items-center justify-between gap-3">
+            <div>
             <p class="stat-label">Estimasi kebutuhan</p>
             <p class="stat-value">{{ format_money($report['estimate']) }}</p>
+            </div>
+            <x-context-icon name="currency" tone="green" />
         </div>
     </div>
 

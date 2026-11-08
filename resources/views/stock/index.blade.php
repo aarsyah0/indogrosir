@@ -7,9 +7,7 @@
                     <p class="stat-label">Total item</p>
                     <p class="stat-value">{{ $items->count() }}</p>
                 </div>
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy-100 text-sm font-bold text-navy-700">
-                    {{ $items->count() }}
-                </div>
+                <x-context-icon name="box" tone="blue" />
             </div>
         </div>
         <div class="stat-card">
@@ -18,9 +16,7 @@
                     <p class="stat-label">Stok rendah</p>
                     <p class="stat-value text-rose-700">{{ $items->filter(fn($row) => $row['low'])->count() }}</p>
                 </div>
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-100 text-sm font-bold text-rose-700">
-                    {{ $items->filter(fn($row) => $row['low'])->count() }}
-                </div>
+                <x-context-icon name="alert" tone="red" />
             </div>
         </div>
         <div class="stat-card">
@@ -29,9 +25,7 @@
                     <p class="stat-label">Total masuk</p>
                     <p class="stat-value">{{ number_format($items->sum(fn($row) => $row['in']), 2) }}</p>
                 </div>
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
-                    <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3.75l-2.25 2.25m0 0L9.75 6.75m3.75-3L18 9m-3.75 3L12 12m-3.75 3L9 15m3.75 3L12 18m-3.75 3L6 21"/></svg>
-                </div>
+                <x-context-icon name="arrow-in" tone="green" />
             </div>
         </div>
         <div class="stat-card">
@@ -40,9 +34,7 @@
                     <p class="stat-label">Total keluar</p>
                     <p class="stat-value text-rose-600">{{ number_format($items->sum(fn($row) => $row['out']), 2) }}</p>
                 </div>
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-600">
-                    <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.2 11.3A2 2 0 0 0 7.2 17h9.6a2 2 0 0 0 2-1.6L21 8H6m4 13h.01M17 21h.01"/></svg>
-                </div>
+                <x-context-icon name="arrow-out" tone="slate" />
             </div>
         </div>
     </div>

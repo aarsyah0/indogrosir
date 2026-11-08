@@ -1,34 +1,14 @@
 <x-app-layout title="Periode Pengajuan">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
-            <x-page-header
-                header="Periode Pengajuan"
-                subheader="Atur kapan staf dapat mengirim pengajuan kebutuhan."
-                class="mb-4"
-            >
-                <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
-                    {{ $periods->total() }} periode
-                </span>
-            </x-page-header>
+    <div class="master-page-heading">
+        <div class="min-w-0">
+            <h2 class="master-page-title">Periode Pengajuan</h2>
+            <p class="master-page-description">Atur kapan staf dapat mengirim pengajuan kebutuhan.</p>
         </div>
-        <form method="GET" class="w-full sm:w-auto">
-            <label class="sr-only" for="period-search">Cari nama atau tahun periode</label>
-            <div class="relative w-full sm:w-80">
-                <input id="period-search" type="search" name="q" value="{{ request('q') }}"
-                    class="input pl-9"
-                    placeholder="Nama atau tahun..." />
-                <svg aria-hidden="true" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-                <button type="submit" class="absolute right-1 top-1/2 -translate-y-1/2 btn-sm btn-secondary">Cari</button>
-                @if (request()->filled('q'))
-                    <a href="{{ route('master.periods.index') }}" class="absolute right-10 top-1/2 -translate-y-1/2 btn-sm btn-ghost">Reset</a>
-                @endif
-            </div>
-        </form>
     </div>
 
-    <div class="mt-4 grid gap-4 xl:grid-cols-12">
+    <div class="grid gap-4 2xl:grid-cols-12">
         <!-- Create period form -->
-        <section class="card xl:col-span-4">
+        <section class="order-2 card h-fit 2xl:order-1 2xl:col-span-4">
             <div class="card-body">
                 <h2 class="section-heading">Buka periode baru</h2>
                 <p class="text-xs text-slate-500 mt-0.5">Tentukan bulan dan rentang tanggal pengajuan.</p>
@@ -59,12 +39,13 @@
         </section>
 
         <!-- Periods list -->
-        <section class="card xl:col-span-8">
+        <section class="order-1 card master-data-card 2xl:order-2 2xl:col-span-8">
+            <div class="card-header flex-col sm:flex-row sm:items-center">
+                <h2 class="card-title">Daftar periode</h2>
+                <x-master-search id="period-search" label="Cari nama atau tahun periode" placeholder="Nama atau tahun periode" reset-route="master.periods.index" />
+            </div>
             <div class="card-body">
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <h2 class="section-heading">Daftar periode</h2>
-                </div>
-                <div class="mt-3 table-wrap">
+                <div class="table-wrap">
                     <table class="min-w-full text-sm">
                         <thead class="bg-navy-50">
                             <tr>
@@ -129,7 +110,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="flex items-center justify-between border-t border-slate-200 px-4 py-3">
+                <div class="flex flex-col gap-2 border-t border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <span class="text-xs text-slate-500">{{ $periods->total() }} periode</span>
                     {{ $periods->links() }}
                 </div>

@@ -1,35 +1,18 @@
 <x-app-layout title="Master Pemasok">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
-            <x-page-header
-                header="Master Pemasok"
-                subheader="Simpan informasi pemasok yang digunakan pada transaksi pembelian."
-                class="mb-4"
-            >
-                <a href="{{ route('master.suppliers.create') }}" class="btn-primary">
-                    <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                    Tambah pemasok
-                </a>
-            </x-page-header>
+    <div class="master-page-heading">
+        <div class="min-w-0">
+            <h2 class="master-page-title">Master Pemasok</h2>
+            <p class="master-page-description">Simpan informasi pemasok yang digunakan pada transaksi pembelian.</p>
         </div>
-        <form method="GET" class="w-full sm:w-auto">
-            <label class="sr-only" for="supplier-search">Cari kode, nama, atau kontak</label>
-            <div class="relative w-full sm:w-80">
-                <input id="supplier-search" type="search" name="q" value="{{ request('q') }}"
-                    class="input pl-9"
-                    placeholder="Nama atau kontak..." />
-                <svg aria-hidden="true" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-                <button type="submit" class="absolute right-1 top-1/2 -translate-y-1/2 btn-sm btn-secondary">Cari</button>
-                @if (request()->filled('q'))
-                    <a href="{{ route('master.suppliers.index') }}" class="absolute right-10 top-1/2 -translate-y-1/2 btn-sm btn-ghost">Reset</a>
-                @endif
-            </div>
-        </form>
+        <a href="#supplier-create" class="btn-primary shrink-0">
+            <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            Tambah pemasok
+        </a>
     </div>
 
-    <div class="mt-4 grid gap-4 xl:grid-cols-12">
+    <div class="grid gap-4 2xl:grid-cols-12">
         <!-- Add supplier form -->
-        <section class="card xl:col-span-4">
+        <section id="supplier-create" class="order-2 card h-fit scroll-mt-24 2xl:order-1 2xl:col-span-4">
             <div class="card-body">
                 <h2 class="section-heading">Tambah pemasok</h2>
                 <p class="text-xs text-slate-500 mt-0.5">Nama dan kode wajib diisi; informasi kontak bersifat opsional.</p>
@@ -71,12 +54,13 @@
         </section>
 
         <!-- Supplier list -->
-        <section class="card xl:col-span-8">
+        <section class="order-1 card master-data-card 2xl:order-2 2xl:col-span-8">
+            <div class="card-header flex-col sm:flex-row sm:items-center">
+                <h2 class="card-title">Daftar pemasok</h2>
+                <x-master-search id="supplier-search" label="Cari kode, nama, atau kontak pemasok" placeholder="Nama atau kontak pemasok" reset-route="master.suppliers.index" />
+            </div>
             <div class="card-body">
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <h2 class="section-heading">Daftar pemasok</h2>
-                </div>
-                <div class="mt-3 table-wrap">
+                <div class="table-wrap">
                     <table class="min-w-full text-sm">
                         <thead class="bg-navy-50">
                             <tr>
@@ -171,7 +155,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="flex items-center justify-between border-t border-slate-200 px-4 py-3">
+                <div class="flex flex-col gap-2 border-t border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <span class="text-xs text-slate-500">{{ $suppliers->total() }} pemasok</span>
                     {{ $suppliers->links() }}
                 </div>

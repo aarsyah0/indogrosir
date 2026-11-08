@@ -1,6 +1,6 @@
 <x-app-layout title="Pengajuan Saya">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
+        <div class="w-full min-w-0 sm:flex-1">
             <x-page-header
                 header="Pengajuan Saya"
                 subheader="Lihat dan kelola pengajuan kebutuhan barang."

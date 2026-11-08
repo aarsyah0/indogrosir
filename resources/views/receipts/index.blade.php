@@ -1,6 +1,6 @@
 <x-app-layout title="Penerimaan Barang">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
+        <div class="w-full min-w-0 sm:flex-1">
             <x-page-header
                 header="Penerimaan Barang"
                 subheader="Catat penerimaan barang dari transaksi pembelian."

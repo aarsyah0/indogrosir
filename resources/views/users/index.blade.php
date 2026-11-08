@@ -1,6 +1,6 @@
 <x-app-layout title="Manajemen Pengguna">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
+        <div class="w-full min-w-0 sm:flex-1">
             <x-page-header
                 header="Manajemen Pengguna"
                 subheader="Akun, divisi, peran, dan akses aplikasi."

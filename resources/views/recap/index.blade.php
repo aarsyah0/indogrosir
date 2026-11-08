@@ -1,7 +1,7 @@
 <x-app-layout title="Rekap Pembelian">
     <x-report-navigation />
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
+        <div class="w-full min-w-0 sm:flex-1">
             <x-page-header
                 header="Rekap Pembelian"
                 subheader="Rincian kuantitas yang dibeli dan diterima."

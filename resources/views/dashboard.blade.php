@@ -1,33 +1,47 @@
 <x-app-layout title="Dashboard">
-    <div class="page-intro">
+    <div class="page-intro dashboard-intro">
         <div>
-            <p class="text-sm font-semibold text-slate-900">Ringkasan operasional</p>
-            <p class="text-xs text-slate-500 mt-0.5">Pantau pengajuan, persetujuan, dan kebutuhan persediaan Anda.</p>
+            <p class="dashboard-eyebrow">Indogrosir &middot; ATK &amp; ABT</p>
+            <h2 class="dashboard-heading">Ringkasan operasional</h2>
+            <p class="dashboard-description">Pantau pengajuan, persetujuan, dan kebutuhan persediaan Anda.</p>
         </div>
-        <p class="text-xs text-slate-500 font-medium">{{ now()->translatedFormat('l, d F Y') }}</p>
+        <p class="dashboard-date"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>{{ now()->translatedFormat('l, d F Y') }}</p>
     </div>
 
     <!-- Stat cards -->
-    <div class="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
+    <div class="dashboard-stats grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         @foreach ($data['cards'] as $index => $card)
-            <div class="stat-card flex items-center gap-3">
-                <div class="flex min-w-0 flex-1 gap-3">
-                    <div class="flex flex-col gap-1">
-                        <p class="stat-label">{{ $card['label'] }}</p>
-                        <p class="stat-value">{{ $card['value'] }}</p>
-                    </div>
+            @php
+                $label = strtolower($card['label']);
+                $statIcon = match (true) {
+                    str_contains($label, 'periode') => 'calendar',
+                    str_contains($label, 'barang aktif') => 'box',
+                    str_contains($label, 'stok rendah') => 'alert',
+                    str_contains($label, 'penerimaan') => 'package-check',
+                    str_contains($label, 'siap dibeli'), str_contains($label, 'pembelian') => 'cart',
+                    str_contains($label, 'pengeluaran'), str_contains($label, 'estimasi'), str_contains($label, 'total kebutuhan') => 'currency',
+                    str_contains($label, 'qty') => 'scale',
+                    str_contains($label, 'revisi'), str_contains($label, 'dikembalikan') => 'rotate',
+                    str_contains($label, 'selesai') => 'check',
+                    str_contains($label, 'masuk') => 'inbox',
+                    str_contains($label, 'menunggu'), str_contains($label, 'proses') => 'clock',
+                    default => 'clipboard',
+                };
+                $statTone = match ($statIcon) {
+                    'alert', 'rotate' => 'red',
+                    'calendar', 'scale' => 'gold',
+                    'currency', 'check', 'package-check' => 'green',
+                    'clipboard', 'inbox', 'box', 'cart', 'clock' => 'blue',
+                    default => 'slate',
+                };
+            @endphp
+            <div class="stat-card dashboard-stat-card" data-tone="{{ $statTone }}" style="--card-index: {{ $index }}">
+                <div class="dashboard-stat-topline">
+                    <span class="stat-label">{{ $card['label'] }}</span>
+                    <x-context-icon :name="$statIcon" :tone="$statTone" class="dashboard-stat-icon" />
                 </div>
-                <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold"
-                    style="background: {{ match($index % 4) {
-                        0 => 'var(--color-brand-500)',
-                        1 => 'var(--color-emerald-500)',
-                        2 => 'var(--color-amber-500)',
-                        3 => 'var(--color-slate-400)',
-                    } }}"
-                >
-                    {{ strtoupper(substr($card['label'], 0, 1)) }}
-                </div>
+                <p class="stat-value">{{ $card['value'] }}</p>
+                <span class="dashboard-stat-rule" aria-hidden="true"></span>
             </div>
         @endforeach
     </div>
@@ -50,11 +64,17 @@
                 <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     @foreach ($adminActions as $action)
                         @if (auth()->user()->hasPermission($action['permission']))
-                            <a href="{{ route($action['route']) }}" class="flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-slate-50"
+                            @php
+                                $actionTone = match ($action['icon']) {
+                                    'package' => 'blue',
+                                    'calendar' => 'gold',
+                                    'users' => 'slate',
+                                    default => 'red',
+                                };
+                            @endphp
+                            <a href="{{ route($action['route']) }}" class="group flex items-start gap-3 rounded-xl border border-transparent p-3 transition duration-150 hover:border-slate-200 hover:bg-slate-50 hover:shadow-sm"
                                 aria-label="{{ $action['label'] }}">
-                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors group-hover:bg-brand group-hover:text-white">
-                                    <svg aria-hidden="true" class="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 22 12 12 22 2 12z"/></svg>
-                                </div>
+                                <x-context-icon :name="$action['icon']" :tone="$actionTone" class="dashboard-action-icon" />
                                 <div class="min-w-0">
                                     <p class="text-sm font-semibold text-slate-900 truncate">{{ $action['label'] }}</p>
                                     <p class="text-xs text-slate-500 truncate">{{ $action['description'] }}</p>

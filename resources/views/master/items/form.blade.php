@@ -1,24 +1,23 @@
 <x-app-layout :title="$item->exists ? 'Edit Barang' : 'Tambah Barang'">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full sm:w-auto">
-            <x-page-header
-                header="{{ $item->exists ? 'Edit Barang' : 'Tambah Barang' }}"
-                subheader="Identitas barang dan parameter persediaan."
-                class="mb-4"
-            >
-                <a href="{{ route('master.items.index') }}" class="btn-secondary">Batal</a>
-            </x-page-header>
+    <div class="master-page-heading">
+        <div class="min-w-0">
+            <h2 class="master-page-title">{{ $item->exists ? 'Edit Barang' : 'Tambah Barang' }}</h2>
+            <p class="master-page-description">Identitas barang dan parameter persediaan.</p>
         </div>
+        <a href="{{ route('master.items.index') }}" class="btn-secondary shrink-0">Kembali ke Master Barang</a>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <form method="POST" action="{{ $item->exists ? route('master.items.update', $item) : route('master.items.store') }}" class="space-y-5">
+    <div class="card mx-auto w-full max-w-5xl">
+        <div class="card-body p-4 sm:p-6 lg:p-8">
+            <form method="POST" action="{{ $item->exists ? route('master.items.update', $item) : route('master.items.store') }}" class="space-y-7">
                 @csrf
                 @if ($item->exists) @method('PUT') @endif
 
-                <section>
-                    <h2 class="section-heading">Informasi barang</h2>
+                <section class="space-y-4">
+                    <div>
+                        <h3 class="card-title text-base">Informasi barang</h3>
+                        <p class="card-subtitle mt-0.5">Identitas dan pengelompokan barang.</p>
+                    </div>
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
                             <label for="item-code" class="block text-sm font-medium text-slate-700 mb-1.5">Kode barang</label>
@@ -49,8 +48,11 @@
                     </div>
                 </section>
 
-                <section>
-                    <h2 class="section-heading">Harga &amp; persediaan</h2>
+                <section class="space-y-4 border-t border-slate-100 pt-6">
+                    <div>
+                        <h3 class="card-title text-base">Harga &amp; persediaan</h3>
+                        <p class="card-subtitle mt-0.5">Nilai referensi dan batas stok untuk pemantauan.</p>
+                    </div>
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
                             <label for="item-price" class="block text-sm font-medium text-slate-700 mb-1.5">Harga referensi</label>
@@ -65,8 +67,12 @@
                     </div>
                 </section>
 
-                <section>
-                    <div class="grid gap-4 md:grid-cols-2">
+                <section class="space-y-4 border-t border-slate-100 pt-6">
+                    <div>
+                        <h3 class="card-title text-base">Keterangan tambahan</h3>
+                        <p class="card-subtitle mt-0.5">Deskripsi bersifat opsional.</p>
+                    </div>
+                    <div class="grid gap-4">
                         <div>
                             <label for="item-description" class="block text-sm font-medium text-slate-700 mb-1.5">Deskripsi <span class="font-normal text-slate-500">(opsional)</span></label>
                             <textarea id="item-description" name="description" rows="3" class="input">{{ old('description', $item->description) }}</textarea>
@@ -74,8 +80,8 @@
                     </div>
                 </section>
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-                    <button type="submit" class="btn-primary flex-1 justify-center">
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-end">
+                    <button type="submit" class="btn-primary justify-center sm:min-w-40">
                         {{ $item->exists ? 'Simpan perubahan' : 'Tambah barang' }}
                     </button>
                     <a href="{{ route('master.items.index') }}" class="btn-secondary">Batal</a>
