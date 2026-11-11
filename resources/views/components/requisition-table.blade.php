@@ -1,4 +1,10 @@
 @props(['requisitions'])
+@if ($requisitions->isEmpty())
+    <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-7 text-center">
+        <p class="text-sm font-medium text-slate-700">Belum ada pengajuan.</p>
+        <p class="mt-1 text-xs text-slate-500">Pengajuan yang masuk akan muncul di sini.</p>
+    </div>
+@else
 <div class="table-wrap">
     <table class="min-w-full text-sm">
         <thead class="bg-navy-50">
@@ -11,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($requisitions as $req)
+            @foreach ($requisitions as $req)
                 <tr class="border-b border-slate-100 transition-colors hover:bg-slate-50/80">
                     <td class="px-4 py-3 font-semibold text-navy-900">{{ $req->number }}</td>
                     <td class="px-4 py-3 text-slate-600">{{ $req->division?->name ?? '—' }}</td>
@@ -26,15 +32,8 @@
                         </a>
                     </td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="px-4 py-10 text-center">
-                        <div class="empty-state">
-                            <p class="text-sm text-slate-500">Belum ada pengajuan.</p>
-                        </div>
-                    </td>
-                </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 </div>
+@endif

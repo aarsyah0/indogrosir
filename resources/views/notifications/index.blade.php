@@ -1,21 +1,19 @@
 <x-app-layout title="Notifikasi">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="w-full min-w-0 sm:flex-1">
-            <x-page-header
-                header="Notifikasi"
-                subheader="Ikuti perkembangan proses pengajuan dan persetujuan Anda."
-                class="mb-4"
-            >
+    <x-page-header
+        header="Notifikasi"
+        subheader="Ikuti perkembangan proses pengajuan dan persetujuan Anda."
+        class="mb-4"
+    >
+        <x-slot:actions>
                 <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
                     {{ $notifications->total() }} notifikasi
                 </span>
-            </x-page-header>
-        </div>
-        <form method="POST" action="{{ route('notifications.read-all') }}">
+        </x-slot:actions>
+        <form method="POST" action="{{ route('notifications.read-all') }}" class="flex justify-end">
             @csrf
             <button type="submit" class="btn-secondary">Tandai semua dibaca</button>
         </form>
-    </div>
+    </x-page-header>
 
     <div class="card">
         <div class="card-body">
