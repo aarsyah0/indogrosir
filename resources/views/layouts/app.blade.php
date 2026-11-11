@@ -71,13 +71,12 @@
             :inert="!sidebar && isMobile">
             <div class="flex h-16 shrink-0 items-center gap-3 border-b border-slate-200 px-4 transition-[padding] duration-200"
                 :class="sidebarCollapsed ? 'lg:justify-center lg:gap-0 lg:px-2' : 'lg:px-5'">
-                <div class="nav-brand-copy min-w-0 flex-1">
-                    <x-indogrosir-logo class="h-8 max-w-36 shrink-0 object-left" />
-                    <p class="mt-1 truncate text-[10px] font-semibold tracking-wide text-slate-700">Indogrosir &middot; ATK &amp; ABT</p>
-                    <p class="mt-0.5 truncate text-[10px] font-medium text-slate-500">Prosedur pengadaan</p>
+                <div class="nav-brand-copy flex min-w-0 flex-1 items-center gap-2.5">
+                    <x-indogrosir-logo class="block h-6 max-w-20 shrink-0 object-left" />
+                    <span class="truncate text-[11px] font-bold tracking-wide text-slate-700">ATK &amp; ABT</span>
                 </div>
                 <button type="button" @click="sidebarCollapsed = !sidebarCollapsed"
-                    class="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-brand-500 lg:inline-flex"
+                    class="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-brand-500 lg:inline-flex"
                     :aria-label="sidebarCollapsed ? 'Perluas navigasi' : 'Ciutkan navigasi'"
                     :title="sidebarCollapsed ? 'Perluas navigasi' : 'Ciutkan navigasi'"
                     aria-controls="primary-navigation"
@@ -188,13 +187,13 @@
                                 <p class="truncate text-[10px] text-slate-500">{{ $currentUser->primaryRoleLabel() }}</p>
                             </div>
                             <a href="{{ route('profile.edit') }}" class="flex min-h-11 items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-slate-700 transition-colors duration-150 hover:bg-slate-50" role="menuitem">
-                                <svg aria-hidden="true" class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m6-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7-7a4 4 0 0 1 0 8m2 3a4 4 0 0 1 3 4v2"/><circle cx="12" cy="12" r="3"/></svg>
+                                <svg aria-hidden="true" class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
                                 Profil
                             </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="flex min-h-11 w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-rose-700 transition-colors duration-150 hover:bg-rose-50" role="menuitem">
-                                    <svg aria-hidden="true" class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m10 0h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2m-4 4h4a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/></svg>
+                                    <svg aria-hidden="true" class="h-4 w-4 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>
                                     Keluar
                                 </button>
                             </form>

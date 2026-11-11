@@ -78,30 +78,33 @@
         </div>
     </div>
 
-    <div
-        x-show="open"
-        x-cloak
-        x-transition.opacity.duration.100ms
-        :id="$id('searchable-select') + '-listbox'"
-        role="listbox"
-        :style="`top: ${menuTop}px; left: ${menuLeft}px; width: ${menuWidth}px`"
-        class="fixed z-[100] max-h-60 overflow-y-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
-    >
-        <template x-for="(option, index) in filteredOptions" :key="option.value">
-            <button
-                type="button"
-                role="option"
-                :id="$id('searchable-select') + '-option-' + index"
-                :aria-selected="(option.value === selected).toString()"
-                @mouseenter="activeIndex = index"
-                @mousedown.prevent
-                @click="choose(option)"
-                class="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-red-50 hover:text-red-800"
-                :class="activeIndex === index ? 'bg-slate-50' : ''"
-                x-text="option.label"
-            ></button>
-        </template>
-        <p x-show="filteredOptions.length === 0" class="px-3 py-3 text-sm text-slate-500">{{ __('Tidak ada pilihan yang cocok.') }}</p>
-    </div>
+    <template x-teleport="body">
+        <div
+            x-show="open"
+            x-cloak
+            x-transition.opacity.duration.100ms
+            :id="$id('searchable-select') + '-listbox'"
+            role="listbox"
+            :style="`top: ${menuTop}px; left: ${menuLeft}px; width: ${menuWidth}px`"
+            class="fixed z-[100] max-h-60 overflow-y-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+            @click.stop
+        >
+            <template x-for="(option, index) in filteredOptions" :key="option.value">
+                <button
+                    type="button"
+                    role="option"
+                    :id="$id('searchable-select') + '-option-' + index"
+                    :aria-selected="(option.value === selected).toString()"
+                    @mouseenter="activeIndex = index"
+                    @mousedown.prevent
+                    @click="choose(option)"
+                    class="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-red-50 hover:text-red-800"
+                    :class="activeIndex === index ? 'bg-slate-50' : ''"
+                    x-text="option.label"
+                ></button>
+            </template>
+            <p x-show="filteredOptions.length === 0" class="px-3 py-3 text-sm text-slate-500">{{ __('Tidak ada pilihan yang cocok.') }}</p>
+        </div>
+    </template>
     <p class="sr-only" aria-live="polite" x-text="open ? filteredOptions.length + ' pilihan ditemukan' : ''"></p>
 </div>

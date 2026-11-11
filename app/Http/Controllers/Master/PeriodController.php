@@ -24,6 +24,11 @@ class PeriodController extends Controller
         ]);
     }
 
+    public function edit(RequestPeriod $period)
+    {
+        return view('master.periods.edit', compact('period'));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -54,6 +59,6 @@ class PeriodController extends Controller
         $period->update($data);
         $this->audit->log($request->user(), 'period.update', $period, $before, $period->fresh()->toArray());
 
-        return back()->with('success', 'Periode diperbarui.');
+        return redirect()->route('master.periods.index')->with('success', 'Periode diperbarui.');
     }
 }

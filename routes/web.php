@@ -6,6 +6,7 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\Master\DivisionController;
+use App\Http\Controllers\Master\ItemCategoryController;
 use App\Http\Controllers\Master\ItemController;
 use App\Http\Controllers\Master\PeriodController;
 use App\Http\Controllers\Master\SupplierController;
@@ -102,21 +103,27 @@ Route::middleware(['auth', 'active'])->group(function () {
     });
 
     Route::middleware('permission:items.manage')->prefix('master')->name('master.')->group(function () {
+        Route::get('categories', [ItemCategoryController::class, 'index'])->name('categories.index');
+        Route::post('categories', [ItemCategoryController::class, 'store'])->name('categories.store');
         Route::resource('items', ItemController::class)->except(['show']);
     });
     Route::middleware('permission:divisions.manage')->prefix('master')->name('master.')->group(function () {
         Route::get('divisions', [DivisionController::class, 'index'])->name('divisions.index');
+        Route::get('divisions/{division}/edit', [DivisionController::class, 'edit'])->name('divisions.edit');
         Route::post('divisions', [DivisionController::class, 'store'])->name('divisions.store');
         Route::put('divisions/{division}', [DivisionController::class, 'update'])->name('divisions.update');
     });
     Route::middleware('permission:suppliers.manage')->prefix('master')->name('master.')->group(function () {
+        Route::get('suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
         Route::get('suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+        Route::get('suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::post('suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
         Route::put('suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
         Route::delete('suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
     });
     Route::middleware('permission:periods.manage')->prefix('master')->name('master.')->group(function () {
         Route::get('periods', [PeriodController::class, 'index'])->name('periods.index');
+        Route::get('periods/{period}/edit', [PeriodController::class, 'edit'])->name('periods.edit');
         Route::post('periods', [PeriodController::class, 'store'])->name('periods.store');
         Route::put('periods/{period}', [PeriodController::class, 'update'])->name('periods.update');
     });

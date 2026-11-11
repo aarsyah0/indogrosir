@@ -25,6 +25,16 @@ class DivisionController extends Controller
         ]);
     }
 
+    public function edit(Division $division)
+    {
+        $division->load('activeManagers');
+
+        return view('master.divisions.edit', [
+            'division' => $division,
+            'users' => User::query()->where('is_active', true)->orderBy('name')->get(),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -64,7 +74,7 @@ class DivisionController extends Controller
         }
         $this->audit->log($request->user(), 'division.update', $division, $before, $division->fresh()->toArray());
 
-        return back()->with('success', 'Divisi diperbarui.');
+        return redirect()->route('master.divisions.index')->with('success', 'Divisi diperbarui.');
     }
 
     public function users()

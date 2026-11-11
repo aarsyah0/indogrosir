@@ -40,10 +40,15 @@ Alpine.data('searchableSelect', ({ options = [], value = '', required = false } 
         if (!this.open || !this.$refs.search) return;
         const rect = this.$refs.search.getBoundingClientRect();
         const width = Math.min(rect.width, window.innerWidth - 16);
-        const maxTop = window.innerHeight - 264;
-        this.menuTop = rect.bottom + 4 <= maxTop
+        // Position against the actual result count. Using the max menu height
+        // here leaves short result lists hundreds of pixels away from the field.
+        const menuHeight = Math.min(240, Math.max(44, this.filteredOptions.length * 36 + 10));
+        const roomBelow = window.innerHeight - rect.bottom - 4;
+        this.menuTop = roomBelow >= menuHeight
             ? rect.bottom + 4
-            : Math.max(8, rect.top - 264);
+            : rect.top >= menuHeight + 12
+                ? rect.top - menuHeight - 4
+                : Math.max(8, rect.bottom + 4);
         this.menuLeft = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
         this.menuWidth = width;
     },

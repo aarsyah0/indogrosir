@@ -131,7 +131,7 @@ class DashboardService
         ];
     }
 
-    private function priceIncreases(): array
+    private function priceIncreases(): \Illuminate\Support\Collection
     {
         $items = Item::query()->where('is_active', true)->get();
         $out = [];
@@ -148,7 +148,7 @@ class DashboardService
             $out[] = ['item' => $item, 'old' => $old, 'new' => $new, 'pct' => round((($new - $old) / $old) * 100, 1)];
         }
 
-        return $out;
+        return collect($out);
     }
 
     private function monthlyNeeds(): array

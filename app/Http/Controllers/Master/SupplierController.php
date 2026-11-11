@@ -23,12 +23,22 @@ class SupplierController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return view('master.suppliers.create');
+    }
+
+    public function edit(Supplier $supplier)
+    {
+        return view('master.suppliers.edit', compact('supplier'));
+    }
+
     public function store(Request $request)
     {
         $supplier = Supplier::query()->create($this->validated($request) + ['is_active' => true]);
         $this->audit->log($request->user(), 'supplier.create', $supplier, null, $supplier->toArray());
 
-        return back()->with('success', 'Pemasok ditambahkan.');
+        return redirect()->route('master.suppliers.index')->with('success', 'Pemasok ditambahkan.');
     }
 
     public function update(Request $request, Supplier $supplier)
@@ -37,7 +47,7 @@ class SupplierController extends Controller
         $supplier->update($this->validated($request, $supplier->id) + ['is_active' => $request->boolean('is_active', true)]);
         $this->audit->log($request->user(), 'supplier.update', $supplier, $before, $supplier->fresh()->toArray());
 
-        return back()->with('success', 'Pemasok diperbarui.');
+        return redirect()->route('master.suppliers.index')->with('success', 'Pemasok diperbarui.');
     }
 
     public function destroy(Request $request, Supplier $supplier)

@@ -57,42 +57,7 @@
                                         <span class="badge badge-{{ $division->is_active ? 'success' : 'default' }}">{{ $division->is_active ? 'Aktif' : 'Nonaktif' }}</span>
                                     </td>
                                     <td class="px-4 py-3 text-right">
-                                        <details class="group text-left">
-                                            <summary class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
-                                                <svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                                                Edit divisi
-                                                <svg aria-hidden="true" class="h-3 w-3 transition-transform group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 3 5 5-5 5"/></svg>
-                                            </summary>
-                                            <form method="POST" action="{{ route('master.divisions.update', $division) }}" class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-left space-y-4">
-                                                @csrf
-                                                @method('PUT')
-                                                <div>
-                                                    <label for="division-code-{{ $division->id }}" class="block text-xs font-medium text-slate-600 mb-1.5">Kode</label>
-                                                    <input id="division-code-{{ $division->id }}" name="code" value="{{ old('code', $division->code) }}" class="input" required />
-                                                </div>
-                                                <div>
-                                                    <label for="division-name-{{ $division->id }}" class="block text-xs font-medium text-slate-600 mb-1.5">Nama</label>
-                                                    <input id="division-name-{{ $division->id }}" name="name" value="{{ old('name', $division->name) }}" class="input" required />
-                                                </div>
-                                                <div>
-                                                    <label for="division-manager-{{ $division->id }}" class="block text-xs font-medium text-slate-600 mb-1.5">Ganti manager <span class="font-normal text-slate-500">(opsional)</span></label>
-                                                    <x-searchable-select id="division-manager-{{ $division->id }}" name="manager_id"
-                                                        :options="$users->map(fn ($user) => ['value' => $user->id, 'label' => $user->name])->prepend(['value' => '', 'label' => 'Pertahankan manager saat ini'])"
-                                                        :selected="old('manager_id', $division->activeManagers->first()?->id) ?? ''"
-                                                        placeholder="Pertahankan manager saat ini"
-                                                        search-placeholder="Cari nama manager"
-                                                        class="mt-1" />
-                                                </div>
-                                                <label class="flex items-center gap-2.5 text-sm font-normal">
-                                                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $division->is_active)) />
-                                                    Divisi aktif
-                                                </label>
-                                                <div class="flex gap-2">
-                                                    <button class="btn-primary flex-1 justify-center">Simpan perubahan</button>
-                                                    <button type="button" class="btn-secondary" @click="document.querySelector('details').open = false">Batal</button>
-                                                </div>
-                                            </form>
-                                        </details>
+                                        <a href="{{ route('master.divisions.edit', $division) }}" class="btn-secondary btn-sm">Edit</a>
                                     </td>
                                 </tr>
                             @empty

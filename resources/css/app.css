@@ -373,6 +373,15 @@
     .master-data-card .card-header { border-bottom: 1px solid var(--color-border); padding: 1rem 1.25rem; }
     .master-data-card .card-body { min-width: 0; padding: 0 1.25rem 1rem; }
     .master-data-card .table-wrap { margin: 0 -1.25rem; width: calc(100% + 2.5rem); }
+    .master-data-card .table-wrap th:last-child { text-align: right; }
+    .supplier-table .table-wrap th,
+    .supplier-table .table-wrap td { padding: .625rem .75rem; }
+    .supplier-table .table-wrap th:first-child,
+    .supplier-table .table-wrap td:first-child { padding-left: 1.25rem; }
+    .supplier-table .table-wrap th:last-child,
+    .supplier-table .table-wrap td:last-child { padding-right: 1.25rem; }
+    .supplier-table .table-wrap td :is(a, button) { min-height: 2rem; }
+    .supplier-table .table-wrap td p { line-height: 1.35; }
     @media (min-width: 640px) {
         .master-data-card .card-body { padding: 0 1.25rem 1rem; }
     }

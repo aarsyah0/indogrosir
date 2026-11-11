@@ -4,10 +4,13 @@
             <h2 class="master-page-title">Master Barang</h2>
             <p class="master-page-description">Katalog barang, satuan, harga referensi, dan batas stok.</p>
         </div>
-        <a href="{{ route('master.items.create') }}" class="btn-primary shrink-0">
-            <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-            Tambah barang
-        </a>
+        <div class="flex shrink-0 flex-wrap gap-2">
+            <a href="{{ route('master.categories.index') }}" class="btn-secondary">Kelola kategori</a>
+            <a href="{{ route('master.items.create') }}" class="btn-primary">
+                <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Tambah barang
+            </a>
+        </div>
     </div>
 
     <section class="card">

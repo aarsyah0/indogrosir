@@ -67,35 +67,7 @@
                                         <span class="badge badge-{{ $period->status === 'open' ? 'success' : 'default' }}">{{ $period->status === 'open' ? 'Terbuka' : 'Ditutup' }}</span>
                                     </td>
                                     <td class="px-4 py-3 text-right">
-                                        <details class="group text-left">
-                                            <summary class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
-                                                <svg aria-hidden="true" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                                                Edit periode
-                                                <svg aria-hidden="true" class="h-3 w-3 transition-transform group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 3 5 5-5 5"/></svg>
-                                            </summary>
-                                            <form method="POST" action="{{ route('master.periods.update', $period) }}" class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-left space-y-3">
-                                                @csrf
-                                                @method('PUT')
-                                                <div>
-                                                    <label for="period-start-{{ $period->id }}" class="block text-xs font-medium text-slate-600 mb-1.5">Tanggal mulai</label>
-                                                    <input id="period-start-{{ $period->id }}" type="date" name="start_date" value="{{ old('start_date', $period->start_date->format('Y-m-d')) }}" class="input" required />
-                                                </div>
-                                                <div>
-                                                    <label for="period-deadline-{{ $period->id }}" class="block text-xs font-medium text-slate-600 mb-1.5">Batas akhir</label>
-                                                    <input id="period-deadline-{{ $period->id }}" type="date" name="deadline_date" value="{{ old('deadline_date', $period->deadline_date->format('Y-m-d')) }}" class="input" required />
-                                                </div>
-                                                <div>
-                                                    <label for="period-status-{{ $period->id }}" class="block text-xs font-medium text-slate-600 mb-1.5">Status</label>
-                                                    <x-searchable-select id="period-status-{{ $period->id }}" name="status"
-                                                        :options="[['value' => 'open', 'label' => 'Terbuka'], ['value' => 'closed', 'label' => 'Ditutup']]"
-                                                        :selected="old('status', $period->status)"
-                                                        placeholder="Pilih status"
-                                                        search-placeholder="Cari status"
-                                                        required class="mt-1" />
-                                                </div>
-                                                <button class="btn-primary w-full justify-center">Simpan perubahan</button>
-                                            </form>
-                                        </details>
+                                        <a href="{{ route('master.periods.edit', $period) }}" class="btn-secondary btn-sm">Edit</a>
                                     </td>
                                 </tr>
                             @empty
