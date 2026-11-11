@@ -73,7 +73,7 @@ Alpine.data('searchableSelect', ({ options = [], value = '', required = false } 
         this.$nextTick(() => this.$refs.search.focus());
     },
     choose(option) {
-        this.selected = option.value;
+        this.selected = String(option.value);
         this.query = '';
         this.open = false;
         this.validate();
