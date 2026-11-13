@@ -28,6 +28,7 @@ class PermissionCatalog
         ],
         'operations' => [
             'procurement.manage' => 'Mencatat pembelian',
+            'procurement.authorize_over_qty' => 'Mengotorisasi pembelian melebihi kuantitas disetujui',
             'procurement.authorize_over_qty' => 'Otorisasi pembelian melebihi kuantitas disetujui',
             'receipts.manage' => 'Mencatat penerimaan barang',
             'stock.manage' => 'Mengelola stok dan penyesuaian',
@@ -67,6 +68,7 @@ class PermissionCatalog
             'suppliers.manage',
             'periods.manage',
             'procurement.manage',
+            'procurement.authorize_over_qty',
             'receipts.manage',
             'stock.manage',
             'reports.view',

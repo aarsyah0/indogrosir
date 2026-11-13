@@ -64,11 +64,16 @@
                             <div class="rounded-lg border border-slate-200 p-3">
                                 <p class="font-medium text-sm text-slate-800">{{ $item->item?->name ?? $item->item_name_snapshot }}</p>
                                 <input type="hidden" name="items[{{ $index }}][item_id]" value="{{ $item->item_id }}" />
-                                <div class="mt-2 grid gap-2 sm:grid-cols-3">
+                                <div class="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                                     <div>
                                         <label class="block text-xs font-medium text-slate-600 mb-1.5">Qty diterima</label>
                                         <input type="number" step="0.01" min="0" max="{{ $remainingByItem[$item->item_id] }}" name="items[{{ $index }}][quantity_received]" value="{{ old('items.' . $index . '.quantity_received', $remainingByItem[$item->item_id]) }}" class="input" required />
                                         <p class="text-xs text-slate-500 mt-1">Sisa yang belum diterima: {{ number_format((float) $remainingByItem[$item->item_id], 2) }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Qty dinyatakan kurang</label>
+                                        <input type="number" step="0.01" min="0" name="items[{{ $index }}][quantity_short]" value="{{ old('items.' . $index . '.quantity_short', 0) }}" class="input" />
+                                        <p class="text-xs text-slate-500 mt-1">Isi hanya jika pemasok mengonfirmasi kekurangan.</p>
                                     </div>
                                     <div>
                                         <label for="receipt-condition-{{ $index }}" class="block text-xs font-medium text-slate-600 mb-1.5">Kondisi</label>

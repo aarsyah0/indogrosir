@@ -28,7 +28,7 @@ class ProcurementController extends Controller
             ->where('status', RequisitionStatus::ApprovedForPurchase)
             ->whereIn('procurement_status', [ProcurementStatus::NotPurchased, ProcurementStatus::Partial])
             ->latest('submitted_at')
-            ->get();
+            ->paginate(10, ['*'], 'ready_page');
 
         return view('procurements.index', compact('orders', 'readyRequisitions'));
     }

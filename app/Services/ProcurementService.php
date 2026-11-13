@@ -59,6 +59,9 @@ class ProcurementService
             if ($over && ! $user->hasPermission('procurement.authorize_over_qty')) {
                 throw new BusinessRuleException('Anda tidak memiliki otorisasi pembelian melebihi persetujuan.');
             }
+            if ($over && blank($payload['over_qty_reason'] ?? null)) {
+                throw new BusinessRuleException('Alasan otorisasi pembelian berlebih wajib diisi.');
+            }
 
             $order = ProcurementOrder::query()->create([
                 'number' => $this->numbers->nextSimple('PO'),
@@ -70,6 +73,7 @@ class ProcurementService
                 'tax' => $payload['tax'] ?? 0,
                 'extra_cost' => $payload['extra_cost'] ?? 0,
                 'over_qty_authorized' => $over,
+                'over_qty_reason' => $over ? $payload['over_qty_reason'] : null,
                 'notes' => $payload['notes'] ?? null,
                 'created_by' => $user->id,
                 'actual_total' => 0,
@@ -146,30 +150,29 @@ class ProcurementService
     public function refreshProcurementStatus(Requisition $requisition): void
     {
         $version = $requisition->latestVersion();
-        $approved = (float) $version->items()->sum('quantity_sm_approved');
-        $bought = (float) ProcurementOrderItem::query()
+        $approvedByItem = $version->items()->get()->keyBy('item_id');
+        $boughtByItem = ProcurementOrderItem::query()
             ->whereHas('order', fn ($q) => $q->where('requisition_id', $requisition->id))
-            ->sum('quantity_purchased');
+            ->selectRaw('item_id, SUM(quantity_purchased) as quantity_purchased')
+            ->groupBy('item_id')
+            ->get()
+            ->keyBy('item_id');
+        $hasPurchases = $boughtByItem->isNotEmpty();
+        $hasRemaining = $approvedByItem->contains(fn ($item, $itemId) =>
+            (float) ($boughtByItem[$itemId]->quantity_purchased ?? 0)
+                + 0.0001 < (float) $item->quantity_sm_approved
+        );
 
         $status = match (true) {
-            $bought <= 0 => ProcurementStatus::NotPurchased,
-            $bought + 0.0001 < $approved => ProcurementStatus::Partial,
+            ! $hasPurchases => ProcurementStatus::NotPurchased,
+            $hasRemaining => ProcurementStatus::Partial,
             default => ProcurementStatus::Completed,
         };
 
-        $receiptStatus = $bought > 0 ? ReceiptStatus::Awaiting : ReceiptStatus::NotReceived;
-        if (in_array($requisition->receipt_status, [
-            ReceiptStatus::Partial,
-            ReceiptStatus::Completed,
-            ReceiptStatus::NeedsInspection,
-        ], true)) {
-            $receiptStatus = $requisition->receipt_status;
+        $requisition->update(['procurement_status' => $status]);
+        if ($hasPurchases && in_array($requisition->receipt_status, [ReceiptStatus::NotReceived, ReceiptStatus::Awaiting], true)) {
+            $requisition->update(['receipt_status' => ReceiptStatus::Awaiting]);
         }
-
-        $requisition->update([
-            'procurement_status' => $status,
-            'receipt_status' => $receiptStatus,
-        ]);
     }
 
     private function storeProof(User $user, ProcurementOrder $order, UploadedFile $file): void

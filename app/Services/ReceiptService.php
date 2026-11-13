@@ -73,7 +73,10 @@ class ReceiptService
                     continue;
                 }
 
-                $short = max($remaining - $received, 0);
+                $short = (float) ($line['quantity_short'] ?? 0);
+                if ($short - max($remaining - $received, 0) > 0.0001) {
+                    throw new BusinessRuleException('Kuantitas kurang yang dilaporkan melebihi sisa pembelian.');
+                }
                 $condition = $line['condition'] ?? 'baik';
                 $gri = GoodsReceiptItem::query()->create([
                     'goods_receipt_id' => $receipt->id,
@@ -136,10 +139,18 @@ class ReceiptService
         $order->load('items', 'requisition');
 
         $req = $order->requisition;
-        $allPurchased = (float) $req->procurementOrders()->with('items')->get()->flatMap->items->sum('quantity_purchased');
-        $allReceived = (float) GoodsReceiptItem::query()
+        $purchasedByItem = $req->procurementOrders()
+            ->with('items')
+            ->get()
+            ->flatMap->items
+            ->groupBy('item_id')
+            ->map(fn ($lines) => (float) $lines->sum('quantity_purchased'));
+        $receivedByItem = GoodsReceiptItem::query()
             ->whereHas('receipt.order', fn ($q) => $q->where('requisition_id', $req->id))
-            ->sum('quantity_received');
+            ->selectRaw('item_id, SUM(quantity_received) as quantity_received')
+            ->groupBy('item_id')
+            ->get()
+            ->keyBy('item_id');
         $requisitionNeedsInspection = GoodsReceiptItem::query()
             ->where(function ($query) {
                 $query->where('quantity_short', '>', 0)
@@ -150,8 +161,10 @@ class ReceiptService
 
         $reqStatus = match (true) {
             $requisitionNeedsInspection => ReceiptStatus::NeedsInspection,
-            $allReceived <= 0 => ReceiptStatus::Awaiting,
-            $allReceived + 0.0001 < $allPurchased => ReceiptStatus::Partial,
+            $receivedByItem->isEmpty() => ReceiptStatus::Awaiting,
+            $purchasedByItem->contains(fn ($quantity, $itemId) =>
+                (float) ($receivedByItem[$itemId]->quantity_received ?? 0) + 0.0001 < (float) $quantity
+            ) => ReceiptStatus::Partial,
             default => ReceiptStatus::Completed,
         };
 

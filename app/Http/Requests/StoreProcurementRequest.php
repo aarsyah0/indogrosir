@@ -23,6 +23,7 @@ class StoreProcurementRequest extends FormRequest
             'extra_cost' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string', 'max:2000'],
             'over_qty_authorized' => ['sometimes', 'boolean'],
+            'over_qty_reason' => ['required_if:over_qty_authorized,1', 'nullable', 'string', 'max:2000'],
             'proof' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.item_id' => ['required', 'exists:items,id', 'distinct'],

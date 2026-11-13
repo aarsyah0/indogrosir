@@ -16,20 +16,15 @@ class ReceiptController extends Controller
     {
         $receipts = GoodsReceipt::query()->with(['order.supplier', 'order.requisition'])->latest()->paginate(15);
         $pendingOrders = ProcurementOrder::query()
-            ->with(['supplier', 'requisition.division', 'items', 'receipts.items'])
+            ->with(['supplier', 'requisition.division'])
             ->latest('purchased_at')
-            ->get()
-            ->filter(function (ProcurementOrder $order) {
-                $receivedByItem = $order->receipts
-                    ->flatMap->items
-                    ->groupBy('item_id')
-                    ->map(fn ($lines) => (float) $lines->sum('quantity_received'));
-
-                return $order->items->contains(fn ($item) =>
-                    (float) $item->quantity_purchased - (float) ($receivedByItem[$item->item_id] ?? 0) > 0.0001
-                );
+            ->whereExists(function ($query) {
+                $query->selectRaw('1')
+                    ->from('procurement_order_items as poi')
+                    ->whereColumn('poi.procurement_order_id', 'procurement_orders.id')
+                    ->whereRaw('poi.quantity_purchased > COALESCE((SELECT SUM(gri.quantity_received) FROM goods_receipts gr INNER JOIN goods_receipt_items gri ON gri.goods_receipt_id = gr.id WHERE gr.procurement_order_id = procurement_orders.id AND gri.item_id = poi.item_id), 0) + 0.0001');
             })
-            ->values();
+            ->paginate(10, ['*'], 'pending_page');
 
         return view('receipts.index', compact('receipts', 'pendingOrders'));
     }

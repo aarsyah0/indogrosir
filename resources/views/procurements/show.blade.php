@@ -86,6 +86,12 @@
                             <dt class="text-slate-500">Biaya lain</dt>
                             <dd class="text-slate-800 font-medium">{{ format_money($order->extra_cost) }}</dd>
                         </div>
+                        @if ($order->over_qty_authorized)
+                            <div class="rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2.5">
+                                <dt class="font-semibold text-amber-900">Otorisasi pembelian berlebih</dt>
+                                <dd class="mt-1 text-amber-800">{{ $order->over_qty_reason ?: 'Alasan tidak tersedia.' }}</dd>
+                            </div>
+                        @endif
                         <div class="flex justify-between gap-4 rounded-lg bg-navy-50 px-3.5 py-2.5">
                             <dt class="text-sm text-slate-600 font-medium">Total akhir</dt>
                             <dd class="text-base font-bold text-navy-900">{{ format_money($order->actual_total) }}</dd>

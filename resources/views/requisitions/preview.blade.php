@@ -1,5 +1,16 @@
 <x-app-layout :title="'Pratinjau ' . $requisition->number">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <style>
+        @media print {
+            body * { visibility: hidden !important; }
+            #requisition-print, #requisition-print * { visibility: visible !important; }
+            #requisition-print { position: absolute; inset: 0; width: 100%; margin: 0 !important; padding: 0 !important; }
+            #requisition-print .print-hidden { display: none !important; }
+            #requisition-print .card { border: 0 !important; box-shadow: none !important; }
+        }
+    </style>
+
+    <div id="requisition-print">
+    <div class="print-hidden flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
             <h1 class="text-xl font-semibold text-slate-900">{{ $requisition->number }}</h1>
             <p class="text-sm text-slate-500 mt-0.5">
@@ -11,10 +22,10 @@
                 <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M14 2v6h6"/></svg>
                 Kembali
             </a>
-            <a href="{{ route('requisitions.preview', $requisition) }}" target="_blank" rel="noopener" class="btn-secondary">
+            <button type="button" onclick="window.print()" class="btn-primary">
                 <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
                 Cetak
-            </a>
+            </button>
         </div>
     </div>
 
@@ -54,4 +65,13 @@
             </div>
         </div>
     </div>
+    </div>
+
+    @push('scripts')
+        @if ($autoPrint)
+            <script>
+                window.addEventListener('load', () => window.setTimeout(() => window.print(), 300));
+            </script>
+        @endif
+    @endpush
 </x-app-layout>

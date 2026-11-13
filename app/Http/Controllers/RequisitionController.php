@@ -91,12 +91,13 @@ class RequisitionController extends Controller
         return redirect()->route('requisitions.show', $requisition)->with('success', $message);
     }
 
-    public function preview(Requisition $requisition)
+    public function preview(Request $request, Requisition $requisition)
     {
         $this->authorize('view', $requisition);
         $version = $requisition->latestVersion()?->load('items');
+        $autoPrint = $request->boolean('print');
 
-        return view('requisitions.preview', compact('requisition', 'version'));
+        return view('requisitions.preview', compact('requisition', 'version', 'autoPrint'));
     }
 
     private function formData(): array

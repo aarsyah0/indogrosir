@@ -21,7 +21,7 @@
                     <p class="mt-1 text-sm text-slate-500">Pengajuan yang sudah disetujui dan masih memiliki barang yang belum dibeli.</p>
                 </div>
                 <span class="inline-flex w-fit items-center rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">
-                    {{ $readyRequisitions->count() }} pengajuan
+                    {{ $readyRequisitions->total() }} pengajuan
                 </span>
             </div>
 
@@ -38,6 +38,7 @@
                     <p class="py-6 text-center text-sm text-slate-500">Belum ada pengajuan yang menunggu pembelian.</p>
                 @endforelse
             </div>
+            <div class="mt-3">{{ $readyRequisitions->links() }}</div>
         </div>
     </div>
 

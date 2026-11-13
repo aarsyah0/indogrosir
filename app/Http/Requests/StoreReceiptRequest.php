@@ -22,6 +22,7 @@ class StoreReceiptRequest extends FormRequest
             'items' => ['required', 'array', 'min:1'],
             'items.*.item_id' => ['required', 'exists:items,id', 'distinct'],
             'items.*.quantity_received' => ['required', 'numeric', 'min:0'],
+            'items.*.quantity_short' => ['nullable', 'numeric', 'min:0'],
             'items.*.condition' => ['required', 'in:baik,rusak,tidak_sesuai'],
             'items.*.discrepancy_notes' => ['nullable', 'string', 'max:1000'],
         ];

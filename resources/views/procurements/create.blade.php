@@ -83,6 +83,19 @@
                         <textarea id="notes" name="notes" rows="2" class="input">{{ old('notes') }}</textarea>
                     </div>
 
+                    @if (auth()->user()->hasPermission('procurement.authorize_over_qty'))
+                        <div class="space-y-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                            <label class="flex items-start gap-2">
+                                <input type="checkbox" name="over_qty_authorized" value="1" @checked(old('over_qty_authorized')) class="mt-0.5" />
+                                <span><strong>Otorisasi pembelian melebihi jumlah disetujui</strong><span class="mt-0.5 block text-xs text-amber-800">Gunakan hanya jika jumlah tambahan sudah mendapat persetujuan.</span></span>
+                            </label>
+                            <div>
+                                <label for="over-qty-reason" class="mb-1 block text-xs font-medium">Alasan otorisasi (wajib jika dicentang)</label>
+                                <textarea id="over-qty-reason" name="over_qty_reason" rows="2" class="input">{{ old('over_qty_reason') }}</textarea>
+                            </div>
+                        </div>
+                    @endif
+
                     <div>
                         <label for="proof" class="block text-sm font-medium text-slate-700 mb-1.5">Bukti pembelian</label>
                         <input id="proof" type="file" name="proof" class="input" accept=".pdf,.jpg,.jpeg,.png" />

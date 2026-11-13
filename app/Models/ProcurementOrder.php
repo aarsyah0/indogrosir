@@ -12,7 +12,7 @@ class ProcurementOrder extends Model
     protected $fillable = [
         'number', 'requisition_id', 'supplier_id', 'purchased_at', 'invoice_number',
         'discount', 'tax', 'extra_cost', 'actual_total', 'over_qty_authorized',
-        'notes', 'created_by',
+        'over_qty_reason', 'notes', 'created_by',
     ];
 
     protected function casts(): array
