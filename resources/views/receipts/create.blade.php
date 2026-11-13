@@ -63,6 +63,7 @@
                         @foreach ($order->items as $index => $item)
                             <div class="rounded-lg border border-slate-200 p-3">
                                 <p class="font-medium text-sm text-slate-800">{{ $item->item?->name ?? $item->item_name_snapshot }}</p>
+                                <input type="hidden" name="items[{{ $index }}][item_id]" value="{{ $item->item_id }}" />
                                 <div class="mt-2 grid gap-2 sm:grid-cols-3">
                                     <div>
                                         <label class="block text-xs font-medium text-slate-600 mb-1.5">Qty diterima</label>

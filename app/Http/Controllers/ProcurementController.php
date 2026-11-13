@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProcurementStatus;
 use App\Enums\RequisitionStatus;
 use App\Http\Requests\StoreProcurementRequest;
 use App\Models\ProcurementOrder;
@@ -22,7 +23,14 @@ class ProcurementController extends Controller
             ->latest()
             ->paginate(15);
 
-        return view('procurements.index', compact('orders'));
+        $readyRequisitions = Requisition::query()
+            ->with(['division', 'latestVersionRecord.items'])
+            ->where('status', RequisitionStatus::ApprovedForPurchase)
+            ->whereIn('procurement_status', [ProcurementStatus::NotPurchased, ProcurementStatus::Partial])
+            ->latest('submitted_at')
+            ->get();
+
+        return view('procurements.index', compact('orders', 'readyRequisitions'));
     }
 
     public function create(Request $request)
@@ -31,9 +39,22 @@ class ProcurementController extends Controller
             ->where('status', RequisitionStatus::ApprovedForPurchase)
             ->findOrFail($request->integer('requisition_id'));
         $version = $requisition->latestVersion()?->load('items');
+        $alreadyPurchased = $requisition->procurementOrders()
+            ->with('items')
+            ->get()
+            ->flatMap->items
+            ->groupBy('item_id')
+            ->map(fn ($items) => (float) $items->sum('quantity_purchased'));
+        $remainingByItem = $version?->items->mapWithKeys(fn ($line) => [
+            $line->item_id => max(
+                (float) ($line->quantity_sm_approved ?? $line->quantity_requested)
+                    - (float) ($alreadyPurchased[$line->item_id] ?? 0),
+                0,
+            ),
+        ]) ?? collect();
         $suppliers = Supplier::query()->where('is_active', true)->orderBy('name')->get();
 
-        return view('procurements.create', compact('requisition', 'version', 'suppliers'));
+        return view('procurements.create', compact('requisition', 'version', 'suppliers', 'remainingByItem'));
     }
 
     public function store(StoreProcurementRequest $request)

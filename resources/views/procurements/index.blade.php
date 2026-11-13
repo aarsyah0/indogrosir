@@ -13,6 +13,34 @@
         </div>
     </div>
 
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                    <h2 class="section-heading">Pengajuan siap dibeli</h2>
+                    <p class="mt-1 text-sm text-slate-500">Pengajuan yang sudah disetujui dan masih memiliki barang yang belum dibeli.</p>
+                </div>
+                <span class="inline-flex w-fit items-center rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">
+                    {{ $readyRequisitions->count() }} pengajuan
+                </span>
+            </div>
+
+            <div class="mt-4 divide-y divide-slate-100">
+                @forelse ($readyRequisitions as $requisition)
+                    <div class="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">{{ $requisition->number }} <span class="font-normal text-slate-500">· {{ $requisition->division?->name ?? '—' }}</span></p>
+                            <p class="mt-1 text-sm text-slate-500">{{ $requisition->procurement_status->label() }} · {{ $requisition->latestVersionRecord?->items?->count() ?? 0 }} barang</p>
+                        </div>
+                        <a href="{{ route('procurements.create', ['requisition_id' => $requisition->id]) }}" class="btn-primary w-full justify-center sm:w-auto">Mulai pembelian</a>
+                    </div>
+                @empty
+                    <p class="py-6 text-center text-sm text-slate-500">Belum ada pengajuan yang menunggu pembelian.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-body">
             <div class="table-wrap">

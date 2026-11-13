@@ -92,10 +92,11 @@
                         @foreach ($version?->items ?? [] as $index => $line)
                             <div class="rounded-lg border border-slate-200 p-3">
                                 <p class="font-medium text-sm text-slate-800">{{ $line->item_name_snapshot }}</p>
+                                <input type="hidden" name="items[{{ $index }}][item_id]" value="{{ $line->item_id }}" />
                                 <div class="mt-2 grid gap-2 sm:grid-cols-3">
                                     <div>
                                         <label class="block text-xs font-medium text-slate-600 mb-1.5">Qty dibeli</label>
-                                        <input type="number" step="0.01" min="0" name="items[{{ $index }}][quantity_purchased]" value="{{ old('items.' . $index . '.quantity_purchased', $line->quantity_sm_approved ?? $line->quantity_requested) }}" class="input" required />
+                                        <input type="number" step="0.01" min="0" name="items[{{ $index }}][quantity_purchased]" value="{{ old('items.' . $index . '.quantity_purchased', $remainingByItem[$line->item_id] ?? ($line->quantity_sm_approved ?? $line->quantity_requested)) }}" class="input" required />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-medium text-slate-600 mb-1.5">Harga satuan</label>

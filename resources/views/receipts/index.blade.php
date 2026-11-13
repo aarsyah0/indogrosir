@@ -13,6 +13,32 @@
         </div>
     </div>
 
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                    <h2 class="section-heading">Pembelian menunggu penerimaan</h2>
+                    <p class="mt-1 text-sm text-slate-500">Pilih transaksi untuk mencatat barang yang sudah diterima.</p>
+                </div>
+                <span class="inline-flex w-fit items-center rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">{{ $pendingOrders->count() }} pembelian</span>
+            </div>
+
+            <div class="mt-4 divide-y divide-slate-100">
+                @forelse ($pendingOrders as $order)
+                    <div class="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">{{ $order->number }} <span class="font-normal text-slate-500">· {{ $order->supplier?->name ?? '—' }}</span></p>
+                            <p class="mt-1 text-sm text-slate-500">Pengajuan {{ $order->requisition?->number ?? '—' }} · {{ $order->requisition?->division?->name ?? '—' }}</p>
+                        </div>
+                        <a href="{{ route('receipts.create', ['procurement_id' => $order->id]) }}" class="btn-primary w-full justify-center sm:w-auto">Catat penerimaan</a>
+                    </div>
+                @empty
+                    <p class="py-6 text-center text-sm text-slate-500">Tidak ada pembelian yang menunggu penerimaan.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-body">
             <div class="table-wrap">

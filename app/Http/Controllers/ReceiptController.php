@@ -15,8 +15,23 @@ class ReceiptController extends Controller
     public function index()
     {
         $receipts = GoodsReceipt::query()->with(['order.supplier', 'order.requisition'])->latest()->paginate(15);
+        $pendingOrders = ProcurementOrder::query()
+            ->with(['supplier', 'requisition.division', 'items', 'receipts.items'])
+            ->latest('purchased_at')
+            ->get()
+            ->filter(function (ProcurementOrder $order) {
+                $receivedByItem = $order->receipts
+                    ->flatMap->items
+                    ->groupBy('item_id')
+                    ->map(fn ($lines) => (float) $lines->sum('quantity_received'));
 
-        return view('receipts.index', compact('receipts'));
+                return $order->items->contains(fn ($item) =>
+                    (float) $item->quantity_purchased - (float) ($receivedByItem[$item->item_id] ?? 0) > 0.0001
+                );
+            })
+            ->values();
+
+        return view('receipts.index', compact('receipts', 'pendingOrders'));
     }
 
     public function create(Request $request)
