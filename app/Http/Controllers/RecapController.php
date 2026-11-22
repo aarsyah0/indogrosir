@@ -11,12 +11,14 @@ use App\Models\Supplier;
 use App\Services\ReportService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RecapController extends Controller
 {
     public function __invoke(Request $request, ReportService $reports)
     {
         $filters = $request->only(['year', 'month', 'division_id', 'item_id', 'supplier_id', 'item_category_id', 'status']);
+        $filters = $this->filtersWithPeriod($request, $filters);
         $rows = $reports->recap($request->user(), $filters);
 
         if ($request->string('export')->toString() === 'xlsx') {
@@ -34,5 +36,23 @@ class RecapController extends Controller
             'statuses' => collect(RequisitionStatus::cases()),
             'filters' => $filters,
         ]);
+    }
+
+    public function pdf(Request $request, ReportService $reports)
+    {
+        $filters = $this->filtersWithPeriod($request, $request->only(['year', 'month', 'division_id', 'item_id', 'supplier_id', 'item_category_id', 'status']));
+        $rows = $reports->recap($request->user(), $filters);
+        $pdf = Pdf::loadView('recap.pdf', compact('rows', 'filters'))->setPaper('a4', 'landscape');
+
+        return $pdf->download('rekap-pembelian.pdf');
+    }
+
+    private function filtersWithPeriod(Request $request, array $filters): array
+    {
+        if ($period = $request->string('period')->toString()) {
+            [$filters['year'], $filters['month']] = array_map('intval', explode('-', $period));
+        }
+
+        return $filters;
     }
 }

@@ -89,6 +89,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     Route::middleware('permission:reports.view')->group(function () {
         Route::get('/recap', RecapController::class)->name('recap.index');
+        Route::get('/recap/pdf', [RecapController::class, 'pdf'])->name('recap.pdf');
         Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
         Route::get('/needs', NeedsController::class)->name('needs.index');
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

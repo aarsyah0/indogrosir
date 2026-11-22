@@ -1,5 +1,4 @@
 <x-app-layout title="Stok & Kartu Gudang">
-    <x-report-navigation />
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div class="stat-card">
             <div class="flex items-center justify-between">

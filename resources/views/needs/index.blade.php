@@ -1,5 +1,4 @@
 <x-app-layout title="Kebutuhan Barang">
-    <x-report-navigation />
     <x-page-header
         header="Kebutuhan Barang"
         subheader="Lihat volume kebutuhan berdasarkan periode dan divisi."
